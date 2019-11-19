@@ -1,9 +1,6 @@
 package com.chengfei.customSource;
 
-import akka.stream.scaladsl.BroadcastHub;
-import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
-import scala.reflect.internal.Types;
 
 /**
  * @ClassName: MyParalleSource
@@ -13,7 +10,7 @@ import scala.reflect.internal.Types;
  * @Version 1.0
  * 具有并行度的source
  **/
-public class MyParalleSource implements SourceFunction {
+public class MyParalleSource implements SourceFunction<Long> {
 
     private long count = 1L;
     private boolean isRunning = true;

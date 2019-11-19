@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>flink-common</module>
-        <module>flilnk-streaming</module>
+        <module>flink-streaming</module>
         <module>flink-batch</module>
         <module>flink-sql</module>
     </modules>
