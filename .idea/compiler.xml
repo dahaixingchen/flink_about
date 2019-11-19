@@ -8,8 +8,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="flink-common" />
         <module name="flink-batch" />
-        <module name="flilnk-streaming" />
         <module name="flink-sql" />
+        <module name="flink-streaming" />
       </profile>
     </annotationProcessing>
   </component>
