@@ -1,6 +1,6 @@
 package com.chengfei.kafka2mysql;
 
-import com.chengfei.sink2Mysql.SinkToMySQL;
+import com.chengfei.customSink.SinkToMySQL;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;

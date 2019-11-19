@@ -1,4 +1,4 @@
-package com.chengfei.sink2Mysql;
+package com.chengfei.customSink;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 
-public class SinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>> implements SinkFunction<Tuple3<String, String, Long>> {
+public class SinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>>  {
     PreparedStatement ps;
     BasicDataSource dataSource;
     private Connection connection;
