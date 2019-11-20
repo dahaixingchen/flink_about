@@ -12,8 +12,10 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.util.Collector;
+import org.apache.log4j.Logger;
 
 import java.util.Properties;
+
 
 /**
  * @ClassName: Kafka2Mysql
@@ -24,7 +26,9 @@ import java.util.Properties;
  **/
 public class Kafka2Mysql {
 
-    public static void main(String[] args) throws Exception {
+    private static Logger logger = Logger.getLogger(Kafka2Mysql.class);
+    public static void main(String[] args) {
+
         Properties pro = new Properties();
         pro.put("bootstrap.servers", "node-1:9092");
         pro.put("group.id", "appHistoryConsumer");
@@ -59,6 +63,10 @@ public class Kafka2Mysql {
         });
         reduceData.print();
         reduceData.addSink(new MySinkToMySQL());
-        env.execute("kafka data to mysql");
+        try {
+            env.execute("kafka data to mysql");
+        } catch (Exception e) {
+            logger.error("程序发生错误"+e);
+        }
     }
 }

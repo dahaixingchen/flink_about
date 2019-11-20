@@ -4,12 +4,14 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 
 public class MySinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>>  {
+    private static Logger logger = Logger.getLogger(MySinkToMySQL.class);
     PreparedStatement ps;
     BasicDataSource dataSource;
     private Connection connection;
@@ -51,13 +53,14 @@ public class MySinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>
      */
 //    public void invoke(List<CodeRealtimeData> value, Context context) throws Exception {
 
+    @Override
     public void invoke(Tuple3<String, String, Long> value, Context context) throws Exception {
         ps.setString(1, value.f0);
         ps.setString(2, value.f1);
         ps.setLong(3, value.f2);
         ps.addBatch();
         int[] count = ps.executeBatch();
-        System.out.println("成功插入了" + count.length + "行数据");
+        logger.info("成功插入了" + count.length + "行数据");
     }
     private static Connection getConnection(BasicDataSource dataSource) {
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
@@ -72,13 +75,13 @@ public class MySinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>
         dataSource.setInitialSize(10);
         dataSource.setMaxTotal(50);
         dataSource.setMinIdle(2);
-        System.out.println("开始建立连接池");
+        logger.info("开始建立连接池");
         Connection con = null;
         try {
             con = dataSource.getConnection();
-            System.out.println("创建连接池：" + con);
+            logger.info("创建连接池：" + con);
         } catch (Exception e) {
-            System.out.println("-----------mysql get connection has exception , msg = " + e.getMessage());
+            logger.info("-----------mysql get connection has exception , msg = " + e.getMessage());
         }
         return con;
     }
