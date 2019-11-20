@@ -1,6 +1,6 @@
 package com.chengfei.streamAPI;
 
-import com.chengfei.customSink.SinkToMySQL;
+import com.chengfei.customSink.MySinkToMySQL;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -21,7 +21,7 @@ import java.util.Properties;
  * @Date 2019/11/19 16:41
  * @Version 1.0
  **/
-public class StreamingDemoMap_Flatmap_Reduce_Keyby {
+public class MapFlatmapReduceKeyby {
     public static void main(String[] args) throws Exception {
         Properties pro = new Properties();
         pro.put("bootstrap.servers", "node-1:9092");
@@ -58,7 +58,7 @@ public class StreamingDemoMap_Flatmap_Reduce_Keyby {
                     }
                 });
         reduceData.print();
-        reduceData.addSink(new SinkToMySQL());
+        reduceData.addSink(new MySinkToMySQL());
         env.execute("kafka data to mysql");
     }
 }

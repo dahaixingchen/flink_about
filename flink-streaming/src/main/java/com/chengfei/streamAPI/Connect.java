@@ -9,12 +9,13 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.CoMapFunction;
 
 /**
- * connect
- * 和union类似，但是只能连接两个流，两个流的数据类型可以不同，会对两个流中的数据应用不同的处理方法
- *
- * Created by xuwei.tech on 2018/10/23.
- */
-public class StreamingDemoConnect {
+  *
+  * @Date 2019/11/20 11:10
+  * @Author chengfei
+  * connect
+  * 和union类似，但是只能连接两个流，两个流的数据类型可以不同，会对两个流中的数据应用不同的处理方法
+  **/
+public class Connect {
 
     public static void main(String[] args) throws Exception {
         //获取Flink的运行环境
@@ -50,7 +51,7 @@ public class StreamingDemoConnect {
         //打印结果
         result.print().setParallelism(1);
 
-        String jobName = StreamingDemoConnect.class.getSimpleName();
+        String jobName = Connect.class.getSimpleName();
         env.execute(jobName);
     }
 }

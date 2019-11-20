@@ -11,16 +11,14 @@ import java.util.ArrayList;
 
 /**
  * split
- *
  * 根据规则把一个数据流切分为多个流
- *
  * 应用场景：
  * 可能在实际工作中，源数据流中混合了多种类似的数据，多种类型的数据处理规则不一样，所以就可以在根据一定的规则，
  * 把一个数据流切分成多个数据流，这样每个数据流就可以使用不用的处理逻辑了
- *
- * Created by xuwei.tech on 2018/10/23.
+ * @Date 2019/11/20 11:02
+ * @Author chengfei
  */
-public class StreamingDemoSplit {
+public class SplitSelect {
 
     public static void main(String[] args) throws Exception {
         //获取Flink的运行环境
@@ -55,7 +53,7 @@ public class StreamingDemoSplit {
         //打印结果
         evenStream.print().setParallelism(1);
 
-        String jobName = StreamingDemoSplit.class.getSimpleName();
+        String jobName = SplitSelect.class.getSimpleName();
         env.execute(jobName);
     }
 }

@@ -11,9 +11,10 @@ import org.apache.flink.streaming.api.windowing.time.Time;
  * union
  * 合并多个流，新的流会包含所有流中的数据，但是union是一个限制，就是所有合并的流类型必须是一致的
  *
- * Created by xuwei.tech on 2018/10/23.
+ * @Date 2019/11/20 11:02
+ * @Author chengfei
  */
-public class StreamingDemoUnion {
+public class Union {
 
     public static void main(String[] args) throws Exception {
         //获取Flink的运行环境
@@ -43,7 +44,7 @@ public class StreamingDemoUnion {
         //打印结果
         sum.print().setParallelism(1);
 
-        String jobName = StreamingDemoUnion.class.getSimpleName();
+        String jobName = Union.class.getSimpleName();
         env.execute(jobName);
     }
 }

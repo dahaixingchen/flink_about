@@ -1,6 +1,6 @@
 package com.chengfei.kafka2mysql;
 
-import com.chengfei.customSink.SinkToMySQL;
+import com.chengfei.customSink.MySinkToMySQL;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -58,7 +58,7 @@ public class Kafka2Mysql {
              }
         });
         reduceData.print();
-        reduceData.addSink(new SinkToMySQL());
+        reduceData.addSink(new MySinkToMySQL());
         env.execute("kafka data to mysql");
     }
 }

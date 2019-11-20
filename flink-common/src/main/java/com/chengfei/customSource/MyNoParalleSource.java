@@ -37,7 +37,7 @@ public class MyNoParalleSource implements SourceFunction<Long> {
             ctx.collect(count);
             count++;
             //每秒产生一条数据
-            Thread.sleep(1000);
+            Thread.sleep(10);
         }
     }
 

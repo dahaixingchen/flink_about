@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 
-public class SinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>>  {
+public class MySinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>>  {
     PreparedStatement ps;
     BasicDataSource dataSource;
     private Connection connection;
