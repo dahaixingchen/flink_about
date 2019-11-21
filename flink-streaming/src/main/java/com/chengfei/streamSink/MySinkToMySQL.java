@@ -10,7 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 
-public class MySinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>>  {
+public class  MySinkToMySQL extends RichSinkFunction<Tuple3<String, String, Long>>  {
     private static Logger logger = Logger.getLogger(MySinkToMySQL.class);
     PreparedStatement ps;
     BasicDataSource dataSource;
