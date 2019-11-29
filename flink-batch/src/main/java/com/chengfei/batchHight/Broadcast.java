@@ -1,4 +1,4 @@
-package com.chengfei.batchAPI;
+package com.chengfei.batchHight;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;

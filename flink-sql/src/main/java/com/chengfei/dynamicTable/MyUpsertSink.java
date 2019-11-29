@@ -53,6 +53,7 @@ public class MyUpsertSink implements UpsertStreamTableSink<Tuple2<String,Long>>{
     @Override
     public void emitDataStream(DataStream<Tuple2<Boolean, Tuple2<String, Long>>> dataStream) {
 //        consumeDataStream(dataStream);
+        dataStream.addSink(new MyDataSink()).setParallelism(1);
     }
 
     //这个是输出結果的方法
@@ -78,8 +79,6 @@ public class MyUpsertSink implements UpsertStreamTableSink<Tuple2<String,Long>>{
     public String[] getFieldNames() {
         return schema.getFieldNames();
     }
-
-
 
     @Override
     public TypeInformation<?>[] getFieldTypes() {

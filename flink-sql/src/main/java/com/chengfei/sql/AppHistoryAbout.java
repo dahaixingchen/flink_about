@@ -90,8 +90,8 @@ public class AppHistoryAbout {
 //        Table selectTable = tableEnv.sqlQuery("select app_no from appHistory where operator_id = 'jiangfan' group by app_no order by app_no limit 10");
         Table selectTable = tableEnv.sqlQuery(" select app_no from appHistory where operator_id = 'jiangfan' group by app_no order by app_no ");
 
-//        DataSet<AppHistory1> appHistoryDataSet = tableEnv.toDataSet(selectTable, AppHistory1.class);
         DataSet<AppHistory1> appHistoryDataSet = tableEnv.toDataSet(selectTable, AppHistory1.class);
+//        DataSet<AppHistory1> appHistoryDataSet = tableEnv.toDataSet(selectTable, AppHistory1.class);
 
 
         MapOperator<AppHistory1, Tuple1<String>> map = appHistoryDataSet.map(new MapFunction<AppHistory1, Tuple1<String>>() {

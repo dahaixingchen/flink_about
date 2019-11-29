@@ -66,7 +66,6 @@ public class kafka2Mysql_table {
                 .field("dt", Types.STRING)
                 .field("pv", Types.LONG)
                 .field("uv", Types.LONG)
-//                .fields(new String[]{"dt","pv","uv"},new DataType[]{Types.STRING,})
                 .build();
 
         JDBCUpsertTableSink sink = JDBCUpsertTableSink
