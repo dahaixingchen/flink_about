@@ -1,6 +1,7 @@
 package com.chengfei.batchAPI;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.operators.FlatMapOperator;
@@ -26,7 +27,7 @@ public class Distinct {
 
         DataSource<String> text = env.fromCollection(data);
 
-        FlatMapOperator<String, String> flatMapData = text.flatMap(new FlatMapFunction<String, String>() {
+        DataSet<String> flatMapData = text.flatMap(new FlatMapFunction<String, String>() {
             @Override
             public void flatMap(String value, Collector<String> out) throws Exception {
                 String[] split = value.toLowerCase().split("\\W+");
@@ -38,7 +39,7 @@ public class Distinct {
         });
 
         flatMapData.distinct()// 对数据进行整体去重
-                .print();
+                .writeAsText("E:\\WorkData\\testData\\rides.txt");
 
 
     }

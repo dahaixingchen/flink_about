@@ -50,8 +50,8 @@ public class DistributedCache {
             }
         });
 
-        result.print();
-
+        result.writeAsText("D:\\data\\count10\\rides.txt");
+        env.execute("dfa");
 
     }
 

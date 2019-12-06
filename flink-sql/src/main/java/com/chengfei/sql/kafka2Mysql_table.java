@@ -63,9 +63,10 @@ public class kafka2Mysql_table {
                 .build();
         TableSchema schema = TableSchema
                 .builder()
-                .field("dt", Types.STRING)
-                .field("pv", Types.LONG)
-                .field("uv", Types.LONG)
+                .fields(new String[]{"dt","pv","uv"},new DataType[]{DataTypes.STRING(), DataTypes.BIGINT(), DataTypes.BIGINT()})
+//                .field("dt", Types.STRING)
+//                .field("pv", Types.LONG)
+//                .field("uv", Types.LONG)
                 .build();
 
         JDBCUpsertTableSink sink = JDBCUpsertTableSink

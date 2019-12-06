@@ -26,7 +26,6 @@ public class MyUpsertSink implements UpsertStreamTableSink<Tuple2<String,Long>>{
     private String[] fieldName;
     private TypeInformation<?>[] fieldTypes;
 
-    //这个方法可以不要但是作为默认构造器，最好还是保留
     public MyUpsertSink() {
     }
 
@@ -52,8 +51,7 @@ public class MyUpsertSink implements UpsertStreamTableSink<Tuple2<String,Long>>{
     //这个方法也不是必须的，可以不用实现它
     @Override
     public void emitDataStream(DataStream<Tuple2<Boolean, Tuple2<String, Long>>> dataStream) {
-//        consumeDataStream(dataStream);
-        dataStream.addSink(new MyDataSink()).setParallelism(1);
+        dataStream.addSink(new MyDataSink());
     }
 
     //这个是输出結果的方法
@@ -65,12 +63,6 @@ public class MyUpsertSink implements UpsertStreamTableSink<Tuple2<String,Long>>{
     //这个方法也不是必须的，可以不用实现它
     @Override
     public TableSink<Tuple2<Boolean, Tuple2<String, Long>>> configure(String[] fieldNames, TypeInformation<?>[] fieldTypes) {
-//        MyUpsertSink myUpsertSink = new MyUpsertSink();
-//        myUpsertSink.setIsAppendOnly(isAppendOnly);
-//        myUpsertSink.setFieldName(fieldName);
-//        myUpsertSink.setFieldTypes(fieldTypes);
-//        myUpsertSink.setKeyFields(keyFields);
-//        return myUpsertSink;
         return null;
     }
 

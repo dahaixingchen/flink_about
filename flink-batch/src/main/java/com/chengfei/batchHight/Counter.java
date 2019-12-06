@@ -8,7 +8,7 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.configuration.Configuration;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * 全局累加器
@@ -54,7 +54,7 @@ public class Counter {
 
         //result.print();
 
-        result.writeAsText("d:\\data\\count10");
+        result.writeAsText("d:\\data\\count10\\rides.txt");
 
         JobExecutionResult jobResult = env.execute("counter");
         //3：获取累加器
