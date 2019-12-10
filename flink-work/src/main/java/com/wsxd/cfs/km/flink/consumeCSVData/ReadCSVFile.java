@@ -1,7 +1,7 @@
-package com.wsxd.cfs.km.flink.consumeRedisData;
+package com.wsxd.cfs.km.flink.consumeCSVData;
 
 import com.wsxd.cfs.km.flink.pojo.Trace;
-import com.wsxd.cfs.km.flink.redis2redis.Redis2Redis;
+import com.wsxd.cfs.km.flink.consumeRedis2Redis.Redis2Redis;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -46,27 +46,30 @@ public class ReadCSVFile {
         BatchTableEnvironment tabEnvBat = BatchTableEnvironment.create(env);
         TableEnvironment tabEnv = TableEnvironment.create(
                 EnvironmentSettings.newInstance().useBlinkPlanner().inBatchMode().build());
-        DataSource<Trace> soData = env.readCsvFile("E:\\WorkData\\xinshen\\TRACE-test.csv")
-//        DataSource<Trace> soData = env.readCsvFile("/root/xinshen/TRACE.csv")
+//        DataSource<Trace> soData = env.readCsvFile("E:\\WorkData\\xinshen\\TRACE-test.csv")
+        DataSource<Trace> soData = env.readCsvFile("/root/xinshen/TRACE.csv")
                 .ignoreFirstLine()
                 .pojoType(Trace.class,
                         "merchantno","saledate","shop","id","name","qty","amount","refundqty","refundamt")
                 .setParallelism(10);
         Table soTab = tabEnvBat.fromDataSet(soData);
         tabEnvBat.registerTable("trace",soTab);
-        Table selTab = tabEnvBat.sqlQuery("select * ," +
-                "ROW_NUMBER() OVER(PARTITION BY id ORDER BY shop DESC) as row_num " +
-                "from trace ");
-//        Table selTab = tabEnvBat.sqlQuery("select * from trace");
+//        Table selTab = tabEnvBat.sqlQuery("select * ," +
+//                "ROW_NUMBER() OVER(PARTITION BY id ORDER BY shop DESC) as row_num " +
+//                "from trace ");
+        String sql = "select id from trace group id";
+        sql = "select * from trace";
+        Table selTab = tabEnvBat.sqlQuery(sql);
         DataSet<Row> resultData = tabEnvBat.toDataSet(selTab, Row.class);
-        resultData.print();
+//        resultData.print();
         DataSet<String> mapData = resultData.map(new MapFunction<Row, String>() {
             @Override
             public String map(Row value) throws Exception {
                 return value.toString();
             }
         });
-        resultData.output(new MyOutput());
+        mapData.writeAsText("");
+//        resultData.output(new MyOutput());
 
         env.execute("read csv file");
     }

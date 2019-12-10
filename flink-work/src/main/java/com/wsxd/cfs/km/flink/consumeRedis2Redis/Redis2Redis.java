@@ -1,4 +1,4 @@
-package com.wsxd.cfs.km.flink.redis2redis;
+package com.wsxd.cfs.km.flink.consumeRedis2Redis;
 
 import com.chengfei.pojo.TblKmTrace;
 import org.apache.flink.api.common.JobExecutionResult;
@@ -19,7 +19,6 @@ import org.apache.flink.streaming.connectors.redis.RedisSink;
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
-import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
@@ -33,7 +32,7 @@ import org.apache.log4j.Logger;
  * @Version 1.0
  **/
 public class Redis2Redis {
-    private static Logger logger = Logger.getLogger(Redis2Redis.class);
+    private final static Logger logger = Logger.getLogger(Redis2Redis.class);
 
     public static void main(String[] args) throws Exception {
 

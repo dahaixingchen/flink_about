@@ -1,4 +1,4 @@
-package com.wsxd.cfs.km.flink.consumeRedisData;
+package com.wsxd.cfs.km.flink.consumeCSVData;
 
 import org.apache.flink.api.common.io.OutputFormat;
 import org.apache.flink.configuration.Configuration;

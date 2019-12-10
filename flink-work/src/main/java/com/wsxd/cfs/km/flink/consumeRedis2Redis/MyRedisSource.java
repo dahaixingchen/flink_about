@@ -1,4 +1,4 @@
-package com.wsxd.cfs.km.flink.redis2redis;
+package com.wsxd.cfs.km.flink.consumeRedis2Redis;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;

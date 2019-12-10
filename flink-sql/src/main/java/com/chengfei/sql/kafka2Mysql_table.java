@@ -40,7 +40,8 @@ public class kafka2Mysql_table {
                 .property("bootstrap.servers", "node-1:9092")
         )
                 .withFormat(
-                        new Json().deriveSchema()
+                        new Json().failOnMissingField(false
+                        ).deriveSchema()
                 )
                 .withSchema(
                         new Schema()

@@ -1,19 +1,21 @@
-package com.wsxd.cfs.km.flink.redis2redis.multiThread;
+package com.wsxd.cfs.km.flink.consumeKafkaData.redisSink;
 
 import com.chengfei.pojo.TblKmTrace;
-import com.wsxd.cfs.km.flink.redis2redis.MyredisMapper;
-import com.wsxd.cfs.km.flink.redis2redis.Redis2Redis;
-import org.apache.flink.api.common.JobExecutionResult;
+import com.wsxd.cfs.km.flink.consumeRedis2Redis.MyredisMapper;
 import org.apache.flink.api.common.accumulators.IntCounter;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011;
 import org.apache.flink.streaming.connectors.redis.RedisSink;
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.flink.table.api.EnvironmentSettings;
@@ -21,48 +23,75 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.log4j.Logger;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
+import java.util.Properties;
 
 /**
- * @ClassName: Redis2RedisTest
+ * @ClassName: ConsumeKafkaData
  * @Description: TODO
  * @Author chengfei
- * @Date 2019/12/2 17:50
+ * @Date 2019/12/6 9:29
  * @Version 1.0
  **/
-public class Redis2RedisMultiThread {
-    private static Logger logger = Logger.getLogger(Redis2Redis.class);
-
+public class ConsumeKafkaData2Redis {
+    private final static Logger logger = Logger.getLogger(ConsumeKafkaData2Redis.class);
     public static void main(String[] args) throws Exception {
+        final ParameterTool par = ParameterTool.fromArgs(args);
         String redisHost = "node-1";
         int redisPort = 6379;
-        if (args.length == 0) {
+        if (par.get("redisHost") == null && par.get("redosPort") == null){
             logger.info("Redis默认的服务器地址：192.168.91.201");
             logger.info("Redis默认的端口号：6379");
             logger.info("如要修改可在程序后加上你需要加的配置");
-        } else if (args.length == 1) {
-            logger.info("Redis服务器地址：" + args[0]);
+        }else if (par.get("redisHost") != null){
+            redisHost = par.get("redisHost");
+            logger.info("Redis服务器地址：" + par.get("redisHost"));
             logger.info("Redis默认的端口号：6379");
-            redisHost = args[0];
-        } else if (args.length == 2) {
-            logger.info("Redis服务器地址：" + args[0]);
-            logger.info("Redis默认的端口号：" + args[1]);
-            redisHost = args[0];
-            redisPort = Integer.valueOf(args[1]);
-        } else {
-            logger.info("您输入的参数个数有误,请从新输入Redis的服务器地址或是IP");
-            return;
+        }else if (par.get("redosPort") != null){
+            redisPort = par.getInt("redosPort");
+            logger.info("Redis默认的服务器地址：192.168.91.201");
+            logger.info("Redis的端口号：" + par.get("redosPort"));
+        }else {
+            redisHost = par.get("redisHost");
+            redisPort = par.getInt("redosPort");
+            logger.info("Redis服务器地址：" + par.get("redisHost"));
+            logger.info("Redis的端口号：" + par.get("redosPort"));
         }
+
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        StreamTableEnvironment tabEnv = StreamTableEnvironment.create(env,
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env,
                 EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build());
 
-        DataStreamSource<String> soData = env.addSource(new MyRedisSourceMultiThread());
+        //开启checkpo
+        env.enableCheckpointing(1000);
+        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+        env.getCheckpointConfig().setCheckpointTimeout(60000);
+        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
 
-        DataStream<TblKmTrace> mapData = soData.flatMap(new RichFlatMapFunction<String, TblKmTrace>() {
+
+        Properties properties = new Properties();
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"node-1:9092");
+        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG,"earliest");
+        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,  "org.apache.kafka.common.serialization.StringDeserializer");
+        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,"org.apache.kafka.common.serialization.StringDeserializer");
+
+        FlinkKafkaConsumer011<String> kafkaConsumer = new FlinkKafkaConsumer011<>("flink-cfsdb.tbl_km_trace", new SimpleStringSchema(), properties);
+
+        DataStreamSource<String> sourceData = env.addSource(kafkaConsumer);
+        DataStream<TblKmTrace> flatMapData = sourceData.flatMap(new RichFlatMapFunction<String, TblKmTrace>() {
+
+            private IntCounter numLines = new IntCounter();
+            private IntCounter totalDataSize = new IntCounter();
+
+            @Override
+            public void open(Configuration parameters) throws Exception {
+                super.open(parameters);
+                getRuntimeContext().addAccumulator("num-lines", numLines);
+                getRuntimeContext().addAccumulator("totalDataSize", totalDataSize);
+            }
+
             @Override
             public void flatMap(String value, Collector<TblKmTrace> out) throws Exception {
                 String[] splits = value.split(";");
@@ -130,48 +159,29 @@ public class Redis2RedisMultiThread {
                 out.collect(tblKmTrace);
                 numLines.add(1);
                 totalDataSize.add(value.length());
-            }
-
-
-            private IntCounter numLines = new IntCounter();
-
-            private IntCounter totalDataSize = new IntCounter();
-
-            @Override
-            public void open(Configuration parameters) throws Exception {
-                super.open(parameters);
-                getRuntimeContext().addAccumulator("num-lines", numLines);
-                getRuntimeContext().addAccumulator("totalDataSize", totalDataSize);
+                Thread.sleep(5);
             }
         });
+        Table sourceTable = tableEnv.fromDataStream(flatMapData,"sys_date,merchantno,saledate,shop,id,name,qty,amount,refundqty,refundamt,create_time,update_time");
+        tableEnv.registerTable("TblKmTrace",sourceTable);
+        Table resultTable = tableEnv.sqlQuery("select id from TblKmTrace group by id ");
 
-        Table soTab = tabEnv.fromDataStream(mapData, "sys_date,merchantno,saledate,shop,id,name,qty,amount,refundqty,refundamt,create_time,update_time");
-
-        tabEnv.registerTable("TblKmTrace", soTab);
-
-        Table selTab = tabEnv.sqlQuery("select id from TblKmTrace group by id");
-
-        DataStream<Row> resultStream = tabEnv.toRetractStream(selTab, TypeInformation.of(new TypeHint<Row>() {
+        DataStream<Row> resultData = tableEnv.toRetractStream(resultTable, TypeInformation.of(new TypeHint<Row>() {
         })).map(new MapFunction<Tuple2<Boolean, Row>, Row>() {
             @Override
             public Row map(Tuple2<Boolean, Row> value) throws Exception {
                 return value.f1;
             }
         });
-        resultStream.print();
+//        resultData.print();
 
         FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder()
                 .setHost(redisHost)
                 .setPort(redisPort)
                 .setTimeout(60000)
                 .build();
-        resultStream.addSink(new RedisSink<>(conf, new MyredisMapper()));
+        resultData.addSink(new RedisSink<>(conf,new MyredisMapper()));
 
-        JobExecutionResult jobResult = env.execute("redis to redis");
-        int accumulatorResultNum = jobResult.getAccumulatorResult("num-lines");
-        double totalDataSize = (int) (jobResult.getAccumulatorResult("totalDataSize")) / 1024.0 / 1024.0;
-        logger.info("共处理数据：" + accumulatorResultNum + " 条");
-        logger.info("共处理的数据量：" + String.format("%.2f", totalDataSize) + "M");
+        env.execute("data to kafka");
     }
-
 }

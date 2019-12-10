@@ -1,4 +1,4 @@
-package com.wsxd.cfs.km.flink.redis2redis;
+package com.wsxd.cfs.km.flink.consumeRedis2Redis;
 
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommand;
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommandDescription;

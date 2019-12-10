@@ -1,7 +1,7 @@
-package com.wsxd.cfs.km.flink.consumeRedisData.distributedCache;
+package com.wsxd.cfs.km.flink.consumeCSVData.distributedCache;
 
 import com.wsxd.cfs.km.flink.pojo.Trace;
-import com.wsxd.cfs.km.flink.redis2redis.Redis2Redis;
+import com.wsxd.cfs.km.flink.consumeRedis2Redis.Redis2Redis;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.DataSource;

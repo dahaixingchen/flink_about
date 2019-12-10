@@ -1,4 +1,4 @@
-package jedisTest;
+package com.wsxd.cfs.km.flink.consumeRedis2Redis.multiThread;
 
 import com.chengfei.pojo.TblKmTrace;
 import com.wsxd.cfs.km.flink.consumeRedis2Redis.MyredisMapper;
@@ -23,8 +23,6 @@ import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
 import org.apache.log4j.Logger;
 
-import java.util.List;
-
 /**
  * @ClassName: Redis2RedisTest
  * @Description: TODO
@@ -32,7 +30,7 @@ import java.util.List;
  * @Date 2019/12/2 17:50
  * @Version 1.0
  **/
-public class Redis2RedisTest {
+public class Redis2RedisMultiThread {
     private static Logger logger = Logger.getLogger(Redis2Redis.class);
 
     public static void main(String[] args) throws Exception {
@@ -59,78 +57,76 @@ public class Redis2RedisTest {
         StreamTableEnvironment tabEnv = StreamTableEnvironment.create(env,
                 EnvironmentSettings.newInstance().useBlinkPlanner().inStreamingMode().build());
 
-        DataStreamSource<List<String>> soData = env.addSource(new MyRedisSourceTest());
+        DataStreamSource<String> soData = env.addSource(new MyRedisSourceMultiThread());
 
-        DataStream<TblKmTrace> mapData = soData.flatMap(new RichFlatMapFunction<List<String>, TblKmTrace>() {
+        DataStream<TblKmTrace> mapData = soData.flatMap(new RichFlatMapFunction<String, TblKmTrace>() {
             @Override
-            public void flatMap(List<String> data, Collector<TblKmTrace> out) throws Exception {
-                for (String value : data) {
-                    String[] splits = value.split(";");
-                    TblKmTrace tblKmTrace = new TblKmTrace();
-                    if (splits[0] != null) {
-                        tblKmTrace.setSys_date(splits[0]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[1] != null) {
-                        tblKmTrace.setMerchantno(splits[1]);
-                    } else {
-                        tblKmTrace.setMerchantno("");
-                    }
-                    if (splits[2] != null) {
-                        tblKmTrace.setSaledate(splits[2]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[3] != null) {
-                        tblKmTrace.setShop(splits[3]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[4] != null) {
-                        tblKmTrace.setId(splits[4]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[5] != null) {
-                        tblKmTrace.setName(splits[5]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[6] != null) {
-                        tblKmTrace.setQty(splits[6]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[7] != null) {
-                        tblKmTrace.setAmount(splits[7]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[8] != null) {
-                        tblKmTrace.setRefundqty(splits[8]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[9] != null) {
-                        tblKmTrace.setRefundamt(splits[9]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[10] != null) {
-                        tblKmTrace.setCreate_time(splits[10]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    if (splits[11] != null) {
-                        tblKmTrace.setUpdate_time(splits[11]);
-                    } else {
-                        tblKmTrace.setSys_date("");
-                    }
-                    out.collect(tblKmTrace);
-                    numLines.add(1);
-                    totalDataSize.add(value.length());
+            public void flatMap(String value, Collector<TblKmTrace> out) throws Exception {
+                String[] splits = value.split(";");
+                TblKmTrace tblKmTrace = new TblKmTrace();
+                if (splits[0] != null) {
+                    tblKmTrace.setSys_date(splits[0]);
+                } else {
+                    tblKmTrace.setSys_date("");
                 }
+                if (splits[1] != null) {
+                    tblKmTrace.setMerchantno(splits[1]);
+                } else {
+                    tblKmTrace.setMerchantno("");
+                }
+                if (splits[2] != null) {
+                    tblKmTrace.setSaledate(splits[2]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[3] != null) {
+                    tblKmTrace.setShop(splits[3]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[4] != null) {
+                    tblKmTrace.setId(splits[4]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[5] != null) {
+                    tblKmTrace.setName(splits[5]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[6] != null) {
+                    tblKmTrace.setQty(splits[6]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[7] != null) {
+                    tblKmTrace.setAmount(splits[7]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[8] != null) {
+                    tblKmTrace.setRefundqty(splits[8]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[9] != null) {
+                    tblKmTrace.setRefundamt(splits[9]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[10] != null) {
+                    tblKmTrace.setCreate_time(splits[10]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                if (splits[11] != null) {
+                    tblKmTrace.setUpdate_time(splits[11]);
+                } else {
+                    tblKmTrace.setSys_date("");
+                }
+                out.collect(tblKmTrace);
+                numLines.add(1);
+                totalDataSize.add(value.length());
             }
 
 
@@ -150,7 +146,7 @@ public class Redis2RedisTest {
 
         tabEnv.registerTable("TblKmTrace", soTab);
 
-        Table selTab = tabEnv.sqlQuery("select * from TblKmTrace ");
+        Table selTab = tabEnv.sqlQuery("select id from TblKmTrace group by id");
 
         DataStream<Row> resultStream = tabEnv.toRetractStream(selTab, TypeInformation.of(new TypeHint<Row>() {
         })).map(new MapFunction<Tuple2<Boolean, Row>, Row>() {
@@ -159,6 +155,7 @@ public class Redis2RedisTest {
                 return value.f1;
             }
         });
+        resultStream.print();
 
         FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder()
                 .setHost(redisHost)

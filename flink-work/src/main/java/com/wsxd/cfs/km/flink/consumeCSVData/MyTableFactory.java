@@ -1,4 +1,4 @@
-package com.wsxd.cfs.km.flink.consumeRedisData;
+package com.wsxd.cfs.km.flink.consumeCSVData;
 
 import org.apache.flink.table.catalog.CatalogTable;
 import org.apache.flink.table.catalog.ObjectPath;

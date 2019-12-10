@@ -1,4 +1,4 @@
-package com.wsxd.cfs.km.flink.redis2redis.multiThread;
+package com.wsxd.cfs.km.flink.consumeRedis2Redis.multiThread;
 
 import org.apache.flink.streaming.api.functions.source.SourceFunction;
 

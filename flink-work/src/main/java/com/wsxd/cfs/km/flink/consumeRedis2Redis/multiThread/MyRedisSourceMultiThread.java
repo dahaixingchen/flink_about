@@ -1,15 +1,11 @@
-package com.wsxd.cfs.km.flink.redis2redis.multiThread;
+package com.wsxd.cfs.km.flink.consumeRedis2Redis.multiThread;
 
-import org.apache.flink.calcite.shaded.com.google.common.collect.Queues;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
-import org.apache.kafka.common.protocol.types.Field;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 

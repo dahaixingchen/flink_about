@@ -1,4 +1,4 @@
-package com.wsxd.cfs.km.flink.consumeRedisData;
+package com.wsxd.cfs.km.flink.consumeCSVData;
 
 import com.wsxd.cfs.km.flink.pojo.Trace;
 import org.apache.flink.api.java.DataSet;
