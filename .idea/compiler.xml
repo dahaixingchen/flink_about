@@ -7,10 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="flink-work" />
-        <module name="flink-streaming" />
         <module name="flink-test" />
         <module name="flink-common" />
         <module name="flink-sql" />
+        <module name="flink-streaming" />
         <module name="flink-batch" />
       </profile>
     </annotationProcessing>

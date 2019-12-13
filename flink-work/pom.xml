@@ -96,16 +96,38 @@
             <version>${flink.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/javax.jdo/jdo-api -->
-<!--        <dependency>-->
-<!--            <groupId>javax.jdo</groupId>-->
-<!--            <artifactId>jdo-api</artifactId>-->
-<!--            <version>3.1</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-hadoop-compatibility_2.11</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-hbase_2.11</artifactId>
+            <version>${flink.version}</version>
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>protobuf-java</artifactId>-->
+<!--                    <groupId>com.google.protobuf</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+        </dependency>
+
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-jdbc_2.11</artifactId>
             <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-shaded-hadoop-2-uber</artifactId>
+            <version>2.6.5-8.0</version>
         </dependency>
     </dependencies>
 

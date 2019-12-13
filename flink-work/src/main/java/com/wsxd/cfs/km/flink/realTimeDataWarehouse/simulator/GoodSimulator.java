@@ -1,15 +1,13 @@
 package com.wsxd.cfs.km.flink.realTimeDataWarehouse.simulator;
 
 import com.wsxd.cfs.km.flink.realTimeDataWarehouse.config.GlobalConfig;
+import com.wsxd.cfs.km.flink.realTimeDataWarehouse.pojo.Orders;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.common.io.OutputFormat;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.jdbc.JDBCOutputFormat;
-import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.types.Row;
-import org.omg.CORBA.Environment;
 
 import java.math.BigDecimal;
 import java.sql.Types;
